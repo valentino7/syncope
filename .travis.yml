@@ -26,4 +26,5 @@ env:
 
 before_install:
 - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh -O ~/install-jdk.sh && chmod +x ~/install-jdk.sh
-script: mvn -U -T 1C clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=valentino7_syncope -Dinvoker.streamLogs=true -Dmodernizer.skip=true -Dianal.skip=true -Drat.skip=true -Dcheckstyle.skip=true -Dsass.skip=true
+install: mvn -U -T 1C -q clean test -Dinvoker.streamLogs=true -Dmodernizer.skip=true -Dianal.skip=true -Drat.skip=true -Dcheckstyle.skip=true -Dsass.skip=true -Dmaven.javadoc.skip=true
+script: mvn verify -q -Pcoverage sonar:sonar -Dsonar.projectKey=valentino7_syncope -Dinvoker.streamLogs=true -Dmodernizer.skip=true -Dianal.skip=true -Drat.skip=true -Dcheckstyle.skip=true -Dsass.skip=true -Dmaven.javadoc.skip=true

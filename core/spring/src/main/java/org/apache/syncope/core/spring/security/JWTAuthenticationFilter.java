@@ -20,17 +20,16 @@ package org.apache.syncope.core.spring.security;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Set;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.cxf.rs.security.jose.jws.JwsException;
 import org.apache.cxf.rs.security.jose.jws.JwsJwtCompactConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -46,26 +45,20 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
-    private final AuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
 
-    private final SyncopeAuthenticationDetailsSource authenticationDetailsSource;
+    @Autowired
+    private SyncopeAuthenticationDetailsSource authenticationDetailsSource;
 
-    private final AuthDataAccessor dataAccessor;
+    @Autowired
+    private AuthDataAccessor dataAccessor;
 
-    private final DefaultCredentialChecker credentialChecker;
+    @Autowired
+    private DefaultCredentialChecker credentialChecker;
 
-    public JWTAuthenticationFilter(
-            final AuthenticationManager authenticationManager,
-            final AuthenticationEntryPoint authenticationEntryPoint,
-            final SyncopeAuthenticationDetailsSource authenticationDetailsSource,
-            final AuthDataAccessor dataAccessor,
-            final DefaultCredentialChecker credentialChecker) {
-
+    public JWTAuthenticationFilter(final AuthenticationManager authenticationManager) {
         super(authenticationManager);
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.authenticationDetailsSource = authenticationDetailsSource;
-        this.dataAccessor = dataAccessor;
-        this.credentialChecker = credentialChecker;
     }
 
     @Override
@@ -94,15 +87,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
                 throw new BadCredentialsException("Invalid signature found in JWT");
             }
 
-            JWTAuthentication jwtAuthentication =
-                    new JWTAuthentication(consumer.getJwtClaims(), authenticationDetailsSource.buildDetails(request));
-            AuthContextUtils.callAsAdmin(jwtAuthentication.getDetails().getDomain(), () -> {
-                Pair<String, Set<SyncopeGrantedAuthority>> authenticated = dataAccessor.authenticate(jwtAuthentication);
-                jwtAuthentication.setUsername(authenticated.getLeft());
-                jwtAuthentication.getAuthorities().addAll(authenticated.getRight());
-                return null;
-            });
-            SecurityContextHolder.getContext().setAuthentication(jwtAuthentication);
+            SecurityContextHolder.getContext().setAuthentication(
+                    new JWTAuthentication(consumer.getJwtClaims(), authenticationDetailsSource.buildDetails(request)));
 
             chain.doFilter(request, response);
         } catch (JwsException e) {

@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.QueryParam;
 import org.apache.syncope.common.lib.types.AuditElements;
 import org.apache.syncope.common.rest.api.service.JAXRSService;
@@ -94,6 +95,7 @@ public class AuditQuery extends AbstractQuery {
         return entityKey;
     }
 
+    @NotNull
     @QueryParam(JAXRSService.PARAM_ENTITY_KEY)
     public void setEntityKey(final String entityKey) {
         this.entityKey = entityKey;

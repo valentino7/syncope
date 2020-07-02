@@ -53,7 +53,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.bootstrap.config.PropertySourceLocator;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
@@ -331,13 +330,8 @@ public class SyncopeWAPropertySourceLocator implements PropertySourceLocator {
                 mapU2fAuthModuleConf(casProperties, authConf);
             }
         });
-
         Map<String, Object> properties = CasCoreConfigurationUtils.asMap(casProperties.withHolder());
         LOG.debug("Collected WA properties: {}", properties);
-
-        ConfigurableEnvironment.class.cast(environment).getPropertySources().
-                addLast(new MapPropertySource(getClass().getName(), properties));
-
-        return null;
+        return new MapPropertySource(getClass().getName(), properties);
     }
 }

@@ -48,13 +48,18 @@ public class NetworkServiceServiceImpl implements NetworkServiceService {
 
     @PreAuthorize("@environment.getProperty('keymaster.username') == authentication.name and not(isAnonymous())")
     @Override
-    public CompletableFuture<Response> action(final NetworkService networkService, final Action action) {
+    public CompletableFuture<Response> register(final NetworkService networkService) {
         return CompletableFuture.supplyAsync(() -> {
-            if (action == Action.unregister) {
-                logic.unregister(networkService);
-            } else {
-                logic.register(networkService);
-            }
+            logic.register(networkService);
+            return Response.noContent().build();
+        });
+    }
+
+    @PreAuthorize("@environment.getProperty('keymaster.username') == authentication.name and not(isAnonymous())")
+    @Override
+    public CompletableFuture<Response> unregister(final NetworkService networkService) {
+        return CompletableFuture.supplyAsync(() -> {
+            logic.unregister(networkService);
             return Response.noContent().build();
         });
     }

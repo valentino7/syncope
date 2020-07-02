@@ -45,7 +45,7 @@ public final class SyncopeConstants {
         "yyyy-MM-dd HH:mm:ss.S", // explicitly added to import date into MySql repository
         "yyyy-MM-dd" };
 
-    public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
+        public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     public static final String ROOT_LOGGER = "ROOT";
 

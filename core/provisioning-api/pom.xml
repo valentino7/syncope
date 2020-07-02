@@ -139,11 +139,13 @@ under the License.
               <maxMutationsPerClass>50</maxMutationsPerClass>
               <targetClasses>
                 <param>org.apache.syncope.core.provisioning.api.utils.FormatUtils</param>
+                <param>org.apache.syncope.core.provisioning.api.jexl.JexlUtils</param>
+
               </targetClasses>
               <targetTests>
-                <param>
-                  org.apache.syncope.core.provisioning.api.utils.FormatUtilsDoubleTest
-                </param>
+                <param>org.apache.syncope.core.provisioning.api.utils.FormatUtilsDateTest</param>
+                <param>org.apache.syncope.core.provisioning.api.utils.FormatUtilsNumberTest</param>
+                <param>org.apache.syncope.core.provisioning.api.jexl.JexlUtilsValidTest</param>
               </targetTests>
 
               <avoidCallsTo>

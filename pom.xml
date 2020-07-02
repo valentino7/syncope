@@ -3003,7 +3003,7 @@ under the License.
             <configuration>
               <argLine>
                 -Xmx2048m -XX:MaxPermSize=1512m
-                -javaagent:${basedir}/ba-dua-lib/ba-dua-agent-rt-0.4.1-SNAPSHOT-all.jar -xml
+                -javaagent:${basedir}/ba-dua-lib/ba-dua-agent-rt-0.4.1-SNAPSHOT-all.jar
                 -Dfile.encoding=${project.build.sourceEncoding}
               </argLine>
               <redirectTestOutputToFile>true</redirectTestOutputToFile>

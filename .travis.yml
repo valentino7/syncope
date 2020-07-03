@@ -14,7 +14,7 @@ cache:
 addons:
   sonarcloud:
     organization: "valentino7"
-    token: 16c60fb810abad347b7fe8242f05a1f40b09a71d
+    token: e23f851fd69d71a722d271117a6e59d3736c145f
 git:
   depth: 2
 env:

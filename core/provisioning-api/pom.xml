@@ -35,8 +35,8 @@ under the License.
   
   <properties>
     <rootpom.basedir>${basedir}/../..</rootpom.basedir>
-    <sonar.coverage.jacoco.xmlReportPaths>${basedir}/../${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
-    <surefire.version>3.0.0-M4</surefire.version>
+    <destFile>{basedir}/target/jacoco.exec</destFile>
+    <sonar.coverage.jacoco.xmlReportPaths>${rootpom.basedir}/${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
   </properties>
 
   <dependencies>
@@ -118,47 +118,4 @@ under the License.
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>pit</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.pitest</groupId>
-            <artifactId>pitest-maven</artifactId>
-            <version>1.5.1</version>
-            <dependencies>
-              <dependency>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-junit5-plugin</artifactId>
-                <version>0.12</version>
-              </dependency>
-            </dependencies>
-            <configuration>
-              <maxMutationsPerClass>50</maxMutationsPerClass>
-              <targetClasses>
-                <param>org.apache.syncope.core.provisioning.api.utils.FormatUtils</param>
-                <param>org.apache.syncope.core.provisioning.api.jexl.JexlUtils</param>
-
-              </targetClasses>
-              <targetTests>
-                <param>org.apache.syncope.core.provisioning.api.utils.FormatUtilsDateTest</param>
-                <param>org.apache.syncope.core.provisioning.api.utils.FormatUtilsNumberTest</param>
-                <param>org.apache.syncope.core.provisioning.api.jexl.JexlUtilsValidTest</param>
-              </targetTests>
-
-              <avoidCallsTo>
-                <avoidCallsTo>java.util.logging</avoidCallsTo>
-                <avoidCallsTo>org.apache.log4j</avoidCallsTo>
-                <avoidCallsTo>org.slf4j</avoidCallsTo>
-                <avoidCallsTo>org.apache.commons.logging</avoidCallsTo>
-              </avoidCallsTo>
-
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

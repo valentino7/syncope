@@ -1,52 +1,47 @@
 package org.apache.syncope.core.provisioning.api.utils;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import java.util.Arrays;
+import org.junit.jupiter.api.Test;
 import java.util.Calendar;
-import java.util.Collection;
+import org.junit.Assert;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@RunWith(Parameterized.class)
 public class FormatUtilsNumberTest {
 
-    private String source;
-    private String conversionPattern;
-    private Number expected;
 
-    @Parameterized.Parameters
-    public static Collection<?> getParameter() {
-        String source1 =  String.valueOf(Calendar.getInstance().getTime().getTime());
-        String pattern1 = "###,###";
-        String invalidPattern = "sgdfhd";
-        String invalidSource = "sgdfhd";
-        Number expected1 = Long.valueOf(source1);
-
-        return Arrays.asList(new Object[][] {
-                {source1, pattern1, expected1},
-                {null, invalidPattern, null},
-                {invalidSource, null, null}
-        });
+    
+    public static Number[] getExpected(Long time){
+        Number[] expecteds = new Number[]{Long.valueOf(time), null, null};
+        return expecteds;
+    }
+    
+    
+    public static String[] getSources(Long time) {
+        String[] pattern = new String[]{String.valueOf(time), null, "invalid"};
+        return pattern;
     }
 
-    public FormatUtilsNumberTest(String source, String conversionPattern, Number expected){
-        this.expected = expected;
-        this.source = source;
-        this.conversionPattern = conversionPattern;
+   
+    public static String[] getPattern() {
+        String[] pattern = new String[]{"###,###", "invalid", null};
+        return pattern;
     }
 
     @Test
     public void parseNumber() {
-        Number result;
-        try{
-            result = FormatUtils.parseNumber(this.source, this.conversionPattern);
-//            System.out.println(result);
-        }catch (Exception e){
-            e.printStackTrace();
-            result = null;
+        Long time = Calendar.getInstance().getTime().getTime();
+        Number[] expecteds = getExpected(time);
+        String[] sources = getSources(time);
+        String[] patterns = getPattern();
+        for(int i=0; i!= expecteds.length; i++){
+
+            Number result;
+            try{
+                result = FormatUtils.parseNumber(sources[i], patterns[i]);
+    //            System.out.println(result);
+            }catch (Exception e){
+                e.printStackTrace();
+                result = null;
+            }
+            Assert.assertEquals(expecteds[i], result);
         }
-        assertEquals(this.expected, result);
     }
 }

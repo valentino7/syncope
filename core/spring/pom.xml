@@ -35,7 +35,7 @@ under the License.
   
   <properties>
     <rootpom.basedir>${basedir}/../..</rootpom.basedir>
-  </properties>
+   </properties>
 
   <dependencies>    
     <dependency> 
@@ -170,5 +170,48 @@ under the License.
       </resource>
     </resources>
   </build>
+  <profiles>
+    <profile>
+      <id>pit</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>1.5.1</version>
+            <dependencies>
+              <dependency>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-junit5-plugin</artifactId>
+                <version>0.12</version>
+              </dependency>
+            </dependencies>
+            <configuration>
+              <maxMutationsPerClass>50</maxMutationsPerClass>
+              <targetClasses>
+                <param>org.apache.syncope.core.spring.security.Encryptor</param>
+                <param>org.apache.syncope.core.spring.security.DefaultPasswordGenerator</param>
+              </targetClasses>
+              <targetTests>
+                <param>
+                  org.apache.syncope.core.spring.EncryptorTest
+                </param>
+                <param>
+                  org.apache.syncope.core.spring.DefaultPasswordGeneratorTest
+                </param>
+              </targetTests>
 
+              <avoidCallsTo>
+                <avoidCallsTo>java.util.logging</avoidCallsTo>
+                <avoidCallsTo>org.apache.log4j</avoidCallsTo>
+                <avoidCallsTo>org.slf4j</avoidCallsTo>
+                <avoidCallsTo>org.apache.commons.logging</avoidCallsTo>
+              </avoidCallsTo>
+
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

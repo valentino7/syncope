@@ -1,57 +1,68 @@
 package org.apache.syncope.core.provisioning.api.utils;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+
+import org.junit.jupiter.api.Test;
+import org.junit.Assert;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static junit.framework.TestCase.assertEquals;
 
-@RunWith(Parameterized.class)
 public class FormatUtilsDateTest {
 
-    private Date date;
-    private String conversionPattern;
-    //leniente viene settato nella trasformazione del formato della data per essere più clemente nell uso del formato
-    private boolean lenient;
-    private String expected;
-
-    @Parameterized.Parameters
-    public static Collection<?> getParameter() {
-        String result1 = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
-        //invalid pattern
-        String result2 = new SimpleDateFormat("ddddddsd").format(Calendar.getInstance().getTime());
 
 
-        return Arrays.asList(new Object[][] {
-                {Calendar.getInstance().getTime(), false, "dd/MM/yyyy", result1  },
-                {null, true, null, null  },
-                {Calendar.getInstance().getTime(), true, "ddddddsd", result2  },
 
-        });
+    public static String[] getPattern() {
+
+        String[] pattern = new String[]{"dd/MM/yyyy", null, "ddddddsd"};
+
+        return pattern;
+    }
+    
+    
+    
+    public static Boolean[] getLenient() {
+
+        Boolean[] lenient = new Boolean[]{false, true, true};
+
+        return lenient;
+
+    }
+    
+    public static Date[] getDate() {
+
+        Date[] date = new Date[]{Calendar.getInstance().getTime(), null, Calendar.getInstance().getTime()};
+
+        return date;
+//        return Arrays.asList(new Object[][] {
+//                {"13 + 4 * 1 / 5.2", true},
+//                {"invalid exp", false},
+//                {null, false}
+//        });
+
     }
 
-
-    public FormatUtilsDateTest(Date date, boolean lenient, String conversionPattern, String expected){
-        this.date = date;
-        this.lenient = lenient;
-        this.conversionPattern = conversionPattern;
-        this.expected = expected;
+    public static String[] getExpected(){
+        String[] expecteds = new String[]{new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()),null,new SimpleDateFormat("ddddddsd").format(Calendar.getInstance().getTime())};
+        return expecteds;
     }
-
 
     @Test
     public void format() {
-        String result;
-        try{
-            result= FormatUtils.format(this.date, this.lenient, this.conversionPattern);
-        }catch(Exception e){
-            e.printStackTrace();
-            result = null;
+        String[] expecteds = getExpected();
+        Boolean[] lenients = getLenient();
+        Date[] dates = getDate();
+        String[] patterns = getPattern();
+        for(int i=0; i!= expecteds.length; i++){
+            String result;
+            try{
+                result= FormatUtils.format(dates[i], lenients[i], patterns[i]);
+            }catch(Exception e){
+                e.printStackTrace();
+                result = null;
+            }
+            Assert.assertEquals(expecteds[i], result);
         }
-        assertEquals(this.expected, result);
-
     }
 
 }

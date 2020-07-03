@@ -118,4 +118,52 @@ under the License.
       </plugin>
     </plugins>
   </build>
+
+    <profiles>
+        <profile>
+            <id>pit</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <version>1.5.1</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.pitest</groupId>
+                                <artifactId>pitest-junit5-plugin</artifactId>
+                                <version>0.12</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <maxMutationsPerClass>50</maxMutationsPerClass>
+                            <targetClasses>
+                                <param>org.apache.syncope.core.provisioning.api.jexl.JexlUtils</param>
+                                <param>org.apache.syncope.core.provisioning.api.utils.FormatUtils</param>
+                            </targetClasses>
+                            <targetTests>
+                                <param>
+                                    org.apache.syncope.core.provisioning.api.utils.FormatUtilsDateTest
+                                </param>
+                                <param>
+                                    org.apache.syncope.core.provisioning.api.utils.FormatUtilsNumberTest
+                                </param>
+                                <param>
+                                    org.apache.syncope.core.provisioning.api.jexl.JexlUtils
+                                </param>
+                            </targetTests>
+
+                            <avoidCallsTo>
+                                <avoidCallsTo>java.util.logging</avoidCallsTo>
+                                <avoidCallsTo>org.apache.log4j</avoidCallsTo>
+                                <avoidCallsTo>org.slf4j</avoidCallsTo>
+                                <avoidCallsTo>org.apache.commons.logging</avoidCallsTo>
+                            </avoidCallsTo>
+
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
